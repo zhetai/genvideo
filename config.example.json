@@ -1,0 +1,42 @@
+{
+  "api": {
+    "alibaba": {
+      "dashscopeApiKey": "your_dashscope_api_key_here",
+      "wan2Models": {
+        "textToVideo": "wanx-video-v2",
+        "imageToVideo": "wanx-image-video",
+        "refToVideo": "wanx-ref-video"
+      }
+    }
+  },
+  "video": {
+    "defaultSettings": {
+      "duration": 5,
+      "width": 1080,
+      "height": 1920,
+      "frameRate": 30
+    },
+    "supportedFormats": ["mp4", "mov", "avi", "wmv", "flv", "webm", "m4v", "3gp"],
+    "maxFileSizeBytes": 137438953472,
+    "maxDurationSeconds": 900
+  },
+  "youtube": {
+    "compliance": {
+      "maxResolution": "1080p",
+      "maxFrameRate": 60,
+      "recommendedFrameRate": 30,
+      "aspectRatios": ["16:9", "4:3", "1:1", "9:16"],
+      "maxDurationShorts": 60,
+      "maxDurationRegular": 43200
+    }
+  },
+  "deployment": {
+    "platform": "cloudflare-pages",
+    "worker": {
+      "compatibilityDate": "2026-02-05",
+      "bindings": {
+        "secretVars": ["DASHSCOPE_API_KEY"]
+      }
+    }
+  }
+}
