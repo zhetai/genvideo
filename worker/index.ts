@@ -1,7 +1,26 @@
 import VideoService from './videoService';
+import DeepSeekService, { type DeepSeekMessage } from './deepseekService';
+import { LLMProvider, getLLMConfig, type DeepSeekConfig } from './llmConfig';
 
 interface Env {
   DASHSCOPE_API_KEY: string;
+  DEEPSEEK_API_KEY?: string;
+}
+
+/**
+ * Convert LLMConfig to DeepSeekConfig
+ */
+function toDeepSeekConfig(config: any): DeepSeekConfig {
+  return {
+    provider: 'deepseek',
+    apiKey: config.apiKey,
+    baseUrl: config.baseUrl,
+    model: config.model as 'deepseek-chat' | 'deepseek-coder',
+    temperature: config.temperature,
+    maxTokens: config.maxTokens,
+    timeout: config.timeout,
+    reasoningEffort: config.reasoningEffort as 'low' | 'medium' | 'high',
+  } as DeepSeekConfig;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -133,6 +152,210 @@ export default {
           'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         },
       });
+    }
+
+    // DeepSeek LLM endpoints
+    if (url.pathname.startsWith("/api/llm/chat")) {
+      if (request.method !== 'POST') {
+        return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+          status: 405,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+
+      try {
+        if (!env.DEEPSEEK_API_KEY) {
+          return new Response(JSON.stringify({ error: 'DEEPSEEK_API_KEY not configured' }), {
+            status: 503,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const body = await request.json() as any;
+        const { messages, config } = body;
+
+        if (!messages || !Array.isArray(messages)) {
+          return new Response(JSON.stringify({ error: 'Missing or invalid messages array' }), {
+            status: 400,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+
+        const llmConfig = getLLMConfig(LLMProvider.DEEPSEEK, {
+          DEEPSEEK_API_KEY: env.DEEPSEEK_API_KEY,
+        } as any, config);
+
+        const deepseekService = new DeepSeekService(toDeepSeekConfig(llmConfig));
+        const result = await deepseekService.chat(messages as DeepSeekMessage[]);
+
+        return new Response(JSON.stringify(result), {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'An error occurred';
+        return new Response(JSON.stringify({ error: message }), {
+          status: 500,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
+      }
+    }
+
+    if (url.pathname.startsWith("/api/llm/VideoPrompt")) {
+      if (request.method !== 'POST') {
+        return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+          status: 405,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+
+      try {
+        if (!env.DEEPSEEK_API_KEY) {
+          return new Response(JSON.stringify({ error: 'DEEPSEEK_API_KEY not configured' }), {
+            status: 503,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const body = await request.json() as any;
+        const { prompt, context } = body;
+
+        if (!prompt) {
+          return new Response(JSON.stringify({ error: 'Missing prompt' }), {
+            status: 400,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+
+        const llmConfig = getLLMConfig(LLMProvider.DEEPSEEK, {
+          DEEPSEEK_API_KEY: env.DEEPSEEK_API_KEY,
+        } as any);
+
+        const deepseekService = new DeepSeekService(toDeepSeekConfig(llmConfig));
+        const enhancedPrompt = await deepseekService.generateVideoPrompt(prompt, context);
+
+        return new Response(JSON.stringify({ prompt: enhancedPrompt }), {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'An error occurred';
+        return new Response(JSON.stringify({ error: message }), {
+          status: 500,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
+      }
+    }
+
+    if (url.pathname.startsWith("/api/llm/enhance")) {
+      if (request.method !== 'POST') {
+        return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+          status: 405,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+
+      try {
+        if (!env.DEEPSEEK_API_KEY) {
+          return new Response(JSON.stringify({ error: 'DEEPSEEK_API_KEY not configured' }), {
+            status: 503,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const body = await request.json() as any;
+        const { prompt } = body;
+
+        if (!prompt) {
+          return new Response(JSON.stringify({ error: 'Missing prompt' }), {
+            status: 400,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+
+        const llmConfig = getLLMConfig(LLMProvider.DEEPSEEK, {
+          DEEPSEEK_API_KEY: env.DEEPSEEK_API_KEY,
+        } as any);
+
+        const deepseekService = new DeepSeekService(toDeepSeekConfig(llmConfig));
+        const result = await deepseekService.enhancePrompt(prompt);
+
+        return new Response(JSON.stringify(result), {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'An error occurred';
+        return new Response(JSON.stringify({ error: message }), {
+          status: 500,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
+      }
+    }
+
+    if (url.pathname.startsWith("/api/llm/info")) {
+      if (request.method !== 'GET') {
+        return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+          status: 405,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+
+      try {
+        if (!env.DEEPSEEK_API_KEY) {
+          return new Response(JSON.stringify({
+            provider: LLMProvider.DEEPSEEK,
+            status: 'not_configured',
+            message: 'DEEPSEEK_API_KEY not configured'
+          }), {
+            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+          });
+        }
+
+        const llmConfig = getLLMConfig(LLMProvider.DEEPSEEK, {
+          DEEPSEEK_API_KEY: env.DEEPSEEK_API_KEY,
+        } as any);
+
+        const deepseekService = new DeepSeekService(toDeepSeekConfig(llmConfig));
+        const providerInfo = deepseekService.getProviderInfo();
+
+        return new Response(JSON.stringify({
+          ...providerInfo,
+          status: 'configured'
+        }), {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'An error occurred';
+        return new Response(JSON.stringify({ error: message }), {
+          status: 500,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
+      }
     }
 
     // Video generation endpoints
@@ -302,15 +525,20 @@ export default {
     // Legacy API endpoint
     if (url.pathname.startsWith("/api/")) {
       return Response.json({
-        name: "Cloudflare Video Generation API",
+        name: "Cloudflare Video Generation & LLM API",
+        version: "2.0.0",
         endpoints: [
+          "/api/llm/chat - DeepSeek chat completion",
+          "/api/llm/VideoPrompt - Generate video prompts using DeepSeek",
+          "/api/llm/enhance - Enhance and analyze prompts",
+          "/api/llm/info - Get LLM provider information",
           "/api/video/generate - Generate video from text/image/reference",
           "/api/video/status - Check generation status",
           "/api/video/compliance - Validate YouTube compliance",
           "/api/video/edit - Edit and process videos"
         ]
       }, {
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'
         }
