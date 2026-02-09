@@ -5,8 +5,8 @@ interface Env {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function generateVideo(prompt: string, type: string, additionalParams?: Record<string, any>, env?: Env) {
-  const apiKey = env?.DASHSCOPE_API_KEY || process.env.DASHSCOPE_API_KEY;
+async function generateVideo(prompt: string, type: string, env: Env, additionalParams?: Record<string, any>) {
+  const apiKey = env.DASHSCOPE_API_KEY;
   
   if (!apiKey) {
     throw new Error("DASHSCOPE_API_KEY is not configured");
@@ -92,8 +92,8 @@ async function generateVideo(prompt: string, type: string, additionalParams?: Re
   return response.json();
 }
 
-async function pollForResult(taskId: string, env?: Env) {
-  const apiKey = env?.DASHSCOPE_API_KEY || process.env.DASHSCOPE_API_KEY;
+async function pollForResult(taskId: string, env: Env) {
+  const apiKey = env.DASHSCOPE_API_KEY;
   
   if (!apiKey) {
     throw new Error("DASHSCOPE_API_KEY is not configured");
@@ -145,7 +145,8 @@ export default {
       }
 
       try {
-        const body = await request.json();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const body = await request.json() as any;
         const { prompt, type, params } = body;
 
         if (!prompt || !type) {
@@ -155,7 +156,7 @@ export default {
           });
         }
 
-        const result = await generateVideo(prompt, type, params);
+        const result = await generateVideo(prompt, type, env, params);
 
         return new Response(JSON.stringify(result), {
           headers: {
@@ -223,7 +224,8 @@ export default {
       }
 
       try {
-        const body = await request.json();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const body = await request.json() as any;
         const { videoPath } = body;
 
         if (!videoPath) {
@@ -263,7 +265,8 @@ export default {
       }
 
       try {
-        const body = await request.json();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const body = await request.json() as any;
         const { inputPath, outputPath, options } = body;
 
         if (!inputPath || !outputPath) {

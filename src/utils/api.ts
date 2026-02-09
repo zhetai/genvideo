@@ -1,9 +1,9 @@
 // utils/api.ts - API utility functions for the video generation platform
 
-import { 
-  VideoGenerationRequest, 
-  VideoGenerationResponse, 
-  VideoEditRequest, 
+import type {
+  VideoGenerationRequest,
+  VideoGenerationResponse,
+  VideoEditRequest,
   VideoEditResponse,
   ComplianceRequest,
   ComplianceResponse

@@ -128,9 +128,10 @@ class VideoService {
   /**
    * Add watermark to video
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static async addWatermark(
     inputPath: string,
-    outputPath: string,
+    _outputPath: string,
     watermarkPath: string,
     position: string = "bottom-right"
   ): Promise<void> {
@@ -165,9 +166,10 @@ class VideoService {
   /**
    * Resize video to target resolution
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static async resizeVideo(
     inputPath: string,
-    outputPath: string,
+    _outputPath: string,
     targetResolution: string
   ): Promise<void> {
     console.log(`Resizing ${inputPath} to ${targetResolution}`);

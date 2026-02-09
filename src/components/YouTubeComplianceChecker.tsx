@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ComplianceRequest, ComplianceResponse } from '../types';
+import type { ComplianceRequest, ComplianceResponse } from '../types';
 import ApiClient from '../utils/api';
 
 const YouTubeComplianceChecker = () => {

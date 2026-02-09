@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { VideoEditOptions, VideoEditRequest } from '../types';
+import type { VideoEditOptions, VideoEditRequest } from '../types';
 import ApiClient from '../utils/api';
 
 const VideoEditor = () => {
