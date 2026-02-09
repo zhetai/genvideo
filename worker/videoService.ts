@@ -44,8 +44,8 @@ class VideoService {
   }
 
   private static async simulateFFmpegProcessing(
-    inputPath: string, 
-    outputPath: string, 
+    inputPath: string,
+    _outputPath: string,
     options: VideoProcessingOptions
   ) {
     // Simulate processing delay
@@ -60,7 +60,8 @@ class VideoService {
   /**
    * Check if a video meets YouTube's requirements
    */
-  static async checkYouTubeCompliance(videoPath: string): Promise<{
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  static async checkYouTubeCompliance(_videoPath: string): Promise<{
     compliant: boolean;
     issues: string[];
     recommendations: string[];
@@ -142,8 +143,9 @@ class VideoService {
   /**
    * Extract audio from video
    */
-  static async extractAudio(inputPath: string, outputPath: string): Promise<void> {
-    console.log(`Extracting audio from ${inputPath} to ${outputPath}`);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  static async extractAudio(inputPath: string, _outputPath: string): Promise<void> {
+    console.log(`Extracting audio from ${inputPath}`);
     
     // In a real implementation, this would use FFmpeg to extract audio
     // ffmpeg -i input.mp4 -q:a 0 -map a audio.mp3
@@ -152,7 +154,8 @@ class VideoService {
   /**
    * Remove audio from video
    */
-  static async removeAudio(inputPath: string, outputPath: string): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  static async removeAudio(inputPath: string, _outputPath: string): Promise<void> {
     console.log(`Removing audio from ${inputPath}`);
     
     // In a real implementation, this would use FFmpeg to remove audio

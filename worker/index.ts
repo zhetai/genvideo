@@ -4,6 +4,7 @@ interface Env {
   DASHSCOPE_API_KEY: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function generateVideo(prompt: string, type: string, additionalParams?: Record<string, any>, env?: Env) {
   const apiKey = env?.DASHSCOPE_API_KEY || process.env.DASHSCOPE_API_KEY;
   
@@ -12,6 +13,7 @@ async function generateVideo(prompt: string, type: string, additionalParams?: Re
   }
 
   let apiUrl = '';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let requestBody: any = {};
 
   switch(type) {
@@ -154,17 +156,18 @@ export default {
         }
 
         const result = await generateVideo(prompt, type, params);
-        
+
         return new Response(JSON.stringify(result), {
-          headers: { 
+          headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*'
           }
         });
-      } catch (error: any) {
-        return new Response(JSON.stringify({ error: error.message }), {
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'An error occurred';
+        return new Response(JSON.stringify({ error: message }), {
           status: 500,
-          headers: { 
+          headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*'
           }
@@ -191,17 +194,18 @@ export default {
         }
 
         const result = await pollForResult(taskId, env);
-        
+
         return new Response(JSON.stringify(result), {
-          headers: { 
+          headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*'
           }
         });
-      } catch (error: any) {
-        return new Response(JSON.stringify({ error: error.message }), {
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'An error occurred';
+        return new Response(JSON.stringify({ error: message }), {
           status: 500,
-          headers: { 
+          headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*'
           }
@@ -230,17 +234,18 @@ export default {
         }
 
         const result = await validateYouTubeCompliance(videoPath);
-        
+
         return new Response(JSON.stringify(result), {
-          headers: { 
+          headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*'
           }
         });
-      } catch (error: any) {
-        return new Response(JSON.stringify({ error: error.message }), {
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'An error occurred';
+        return new Response(JSON.stringify({ error: message }), {
           status: 500,
-          headers: { 
+          headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*'
           }
@@ -269,20 +274,21 @@ export default {
         }
 
         const success = await VideoService.processVideo(inputPath, outputPath, options);
-        
-        return new Response(JSON.stringify({ 
+
+        return new Response(JSON.stringify({
           success,
           message: success ? 'Video processed successfully' : 'Video processing failed'
         }), {
-          headers: { 
+          headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*'
           }
         });
-      } catch (error: any) {
-        return new Response(JSON.stringify({ error: error.message }), {
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'An error occurred';
+        return new Response(JSON.stringify({ error: message }), {
           status: 500,
-          headers: { 
+          headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*'
           }

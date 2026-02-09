@@ -10,8 +10,10 @@ export interface VideoGenerationRequest {
       duration?: number;
       width?: number;
       height?: number;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       [key: string]: any; // Allow additional configuration options
     };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any; // Allow additional parameters
   };
 }
@@ -20,6 +22,7 @@ export interface VideoGenerationResponse {
   taskId?: string;
   videoUrl?: string;
   status?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   result?: any;
   error?: string;
 }
@@ -32,6 +35,7 @@ export interface VideoEditOptions {
   targetResolution?: string; // e.g. "1080p", "720p"
   targetFrameRate?: number;
   durationLimit?: number; // in seconds
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any; // Allow additional options
 }
 

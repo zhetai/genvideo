@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { VideoGenerationRequest, VideoGenerationResponse } from '../types';
+import { VideoGenerationRequest } from '../types';
 import ApiClient from '../utils/api';
 
 const VideoGenerator = () => {
