@@ -10,6 +10,7 @@ interface Env {
 /**
  * Convert LLMConfig to DeepSeekConfig
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function toDeepSeekConfig(config: any): DeepSeekConfig {
   return {
     provider: 'deepseek',
@@ -184,6 +185,7 @@ export default {
 
         const llmConfig = getLLMConfig(LLMProvider.DEEPSEEK, {
           DEEPSEEK_API_KEY: env.DEEPSEEK_API_KEY,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any, config);
 
         const deepseekService = new DeepSeekService(toDeepSeekConfig(llmConfig));
@@ -236,6 +238,7 @@ export default {
 
         const llmConfig = getLLMConfig(LLMProvider.DEEPSEEK, {
           DEEPSEEK_API_KEY: env.DEEPSEEK_API_KEY,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any);
 
         const deepseekService = new DeepSeekService(toDeepSeekConfig(llmConfig));
@@ -288,6 +291,7 @@ export default {
 
         const llmConfig = getLLMConfig(LLMProvider.DEEPSEEK, {
           DEEPSEEK_API_KEY: env.DEEPSEEK_API_KEY,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any);
 
         const deepseekService = new DeepSeekService(toDeepSeekConfig(llmConfig));
@@ -332,6 +336,7 @@ export default {
 
         const llmConfig = getLLMConfig(LLMProvider.DEEPSEEK, {
           DEEPSEEK_API_KEY: env.DEEPSEEK_API_KEY,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any);
 
         const deepseekService = new DeepSeekService(toDeepSeekConfig(llmConfig));

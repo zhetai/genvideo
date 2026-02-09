@@ -128,7 +128,6 @@ class VideoService {
   /**
    * Add watermark to video
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static async addWatermark(
     inputPath: string,
     _outputPath: string,
@@ -166,7 +165,6 @@ class VideoService {
   /**
    * Resize video to target resolution
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static async resizeVideo(
     inputPath: string,
     _outputPath: string,
